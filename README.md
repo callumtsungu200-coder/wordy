@@ -2,6 +2,8 @@
 
 An unlimited five-letter word puzzle built with React and TypeScript. Guess the hidden word in six tries, then start another round straight away. There's no daily limit, no account and no server. Everything runs and saves in your browser.
 
+**Play it:** https://callumtsungu200-coder.github.io/wordy/
+
 ## Features
 
 - **Unlimited rounds.** Every round picks a new random answer and avoids your 200 most recent words.
