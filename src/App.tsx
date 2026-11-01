@@ -86,7 +86,7 @@ export default function App() {
           </button>
         </div>
         <h1 className="logo">
-          Lexicle<span className="logo-dot" aria-hidden="true" />
+          Wordy<span className="logo-dot" aria-hidden="true" />
         </h1>
         <div className="topbar-side right">
           <button

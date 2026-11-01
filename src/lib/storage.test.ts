@@ -3,6 +3,7 @@ import {
   loadPrefs,
   loadRecent,
   loadStats,
+  migrateLegacyKeys,
   pushRecent,
   recordResult,
   savePrefs,
@@ -48,10 +49,20 @@ describe('persistence', () => {
 
   it('returns empty stats for missing or corrupt data', () => {
     expect(loadStats()).toEqual(emptyStats());
-    localStorage.setItem('lexicle:stats', '{not json');
+    localStorage.setItem('wordy:stats', '{not json');
     expect(loadStats()).toEqual(emptyStats());
-    localStorage.setItem('lexicle:stats', JSON.stringify({ played: -4, distribution: [1, 2] }));
+    localStorage.setItem('wordy:stats', JSON.stringify({ played: -4, distribution: [1, 2] }));
     expect(loadStats()).toEqual(emptyStats());
+  });
+
+  it('migrates data saved under the old Lexicle keys', () => {
+    const s = recordResult(emptyStats(), true, 3);
+    localStorage.setItem('lexicle:stats', JSON.stringify(s));
+    localStorage.setItem('lexicle:prefs', JSON.stringify({ theme: 'dark', seenHelp: true }));
+    migrateLegacyKeys();
+    expect(loadStats()).toEqual(s);
+    expect(loadPrefs().theme).toBe('dark');
+    expect(localStorage.getItem('lexicle:stats')).toBeNull();
   });
 
   it('round-trips preferences', () => {

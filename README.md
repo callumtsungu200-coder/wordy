@@ -1,4 +1,4 @@
-# Lexicle
+# Wordy
 
 An unlimited five-letter word puzzle built with React and TypeScript. Guess the hidden word in six tries, then start another round straight away. There's no daily limit, no account and no server. Everything runs and saves in your browser.
 
@@ -79,10 +79,10 @@ The app stores everything locally under these `localStorage` keys:
 
 | Key | Contents |
 | --- | --- |
-| `lexicle:stats` | Statistics |
-| `lexicle:prefs` | Theme and whether the help screen has been seen |
-| `lexicle:game` | The round in progress |
-| `lexicle:recent` | Recently used answers, so they aren't repeated |
+| `wordy:stats` | Statistics |
+| `wordy:prefs` | Theme and whether the help screen has been seen |
+| `wordy:game` | The round in progress |
+| `wordy:recent` | Recently used answers, so they aren't repeated |
 
 Nothing is sent over the network. The only external request is for the Inter web font, and the app falls back to system fonts if it can't load.
 
@@ -93,7 +93,7 @@ Nothing is sent over the network. The only external request is for the Inter web
 
 ## Testing
 
-The project has 34 tests, run with Vitest and Testing Library. They cover:
+The project has 35 tests, run with Vitest and Testing Library. They cover:
 
 - scoring, including repeated-letter cases
 - dictionary validation and checks on the answer list

@@ -6,8 +6,8 @@ import { REVEAL_MS } from './lib/useGame';
 const ANSWER = 'crane';
 
 function seedGame(answer = ANSWER) {
-  localStorage.setItem('lexicle:game', JSON.stringify({ answer, guesses: [] }));
-  localStorage.setItem('lexicle:prefs', JSON.stringify({ theme: 'system', seenHelp: true }));
+  localStorage.setItem('wordy:game', JSON.stringify({ answer, guesses: [] }));
+  localStorage.setItem('wordy:prefs', JSON.stringify({ theme: 'system', seenHelp: true }));
 }
 
 function press(key: string) {
@@ -30,7 +30,7 @@ function rowLabels() {
 }
 
 function storedStats() {
-  return JSON.parse(localStorage.getItem('lexicle:stats') ?? 'null');
+  return JSON.parse(localStorage.getItem('wordy:stats') ?? 'null');
 }
 
 beforeEach(() => {
@@ -139,7 +139,7 @@ describe('App gameplay', () => {
     });
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(rowLabels().every((l) => l === 'Empty row' || l === 'Current guess')).toBe(true);
-    const saved = JSON.parse(localStorage.getItem('lexicle:game')!);
+    const saved = JSON.parse(localStorage.getItem('wordy:game')!);
     expect(saved.guesses).toEqual([]);
     expect(ANSWERS).toContain(saved.answer);
     expect(saved.answer).not.toBe(ANSWER);
@@ -147,7 +147,7 @@ describe('App gameplay', () => {
 
   it('handles a loss: reveals the answer and resets the streak', () => {
     localStorage.setItem(
-      'lexicle:stats',
+      'wordy:stats',
       JSON.stringify({
         played: 3,
         wins: 3,
@@ -181,13 +181,13 @@ describe('App gameplay', () => {
       vi.advanceTimersByTime(300);
     });
     press('Enter');
-    expect(JSON.parse(localStorage.getItem('lexicle:game')!).answer).not.toBe(ANSWER);
+    expect(JSON.parse(localStorage.getItem('wordy:game')!).answer).not.toBe(ANSWER);
     expect(rowLabels()[0]).toBe('Current guess');
   });
 
   it('resumes an in-progress round after reload', () => {
-    localStorage.setItem('lexicle:game', JSON.stringify({ answer: ANSWER, guesses: ['nacre'] }));
-    localStorage.setItem('lexicle:prefs', JSON.stringify({ theme: 'system', seenHelp: true }));
+    localStorage.setItem('wordy:game', JSON.stringify({ answer: ANSWER, guesses: ['nacre'] }));
+    localStorage.setItem('wordy:prefs', JSON.stringify({ theme: 'system', seenHelp: true }));
     render(<App />);
     expect(rowLabels()[0]).toMatch(/^NACRE:/);
     type('crane');
@@ -220,14 +220,14 @@ describe('Settings', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Settings' }));
     fireEvent.click(screen.getByRole('radio', { name: 'Dark' }));
     expect(document.documentElement.dataset.theme).toBe('dark');
-    expect(JSON.parse(localStorage.getItem('lexicle:prefs')!).theme).toBe('dark');
+    expect(JSON.parse(localStorage.getItem('wordy:prefs')!).theme).toBe('dark');
     fireEvent.click(screen.getByRole('radio', { name: 'System' }));
     expect(document.documentElement.dataset.theme).toBeUndefined();
   });
 
   it('resets statistics only after confirmation', () => {
     localStorage.setItem(
-      'lexicle:stats',
+      'wordy:stats',
       JSON.stringify({
         played: 5,
         wins: 4,

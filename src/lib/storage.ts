@@ -25,13 +25,28 @@ export interface SavedGame {
 }
 
 const KEYS = {
-  stats: 'lexicle:stats',
-  prefs: 'lexicle:prefs',
-  game: 'lexicle:game',
-  recent: 'lexicle:recent',
+  stats: 'wordy:stats',
+  prefs: 'wordy:prefs',
+  game: 'wordy:game',
+  recent: 'wordy:recent',
 } as const;
 
 const RECENT_LIMIT = 200;
+
+/** Copies data saved before the game was renamed from Lexicle, then removes it. */
+export function migrateLegacyKeys(): void {
+  try {
+    for (const key of Object.values(KEYS)) {
+      const legacy = key.replace('wordy:', 'lexicle:');
+      const old = localStorage.getItem(legacy);
+      if (old === null) continue;
+      if (localStorage.getItem(key) === null) localStorage.setItem(key, old);
+      localStorage.removeItem(legacy);
+    }
+  } catch {
+    // Storage unavailable; nothing to migrate.
+  }
+}
 
 export const emptyStats = (): Stats => ({
   played: 0,
